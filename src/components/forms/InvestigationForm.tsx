@@ -76,14 +76,14 @@ export function InvestigationForm() {
         <div className="mx-auto space-y-8 pb-20 transition-all duration-300 max-w-full px-4 md:px-8">
             {/* Header */}
             <div className="space-y-4 print:hidden">
-                <Button variant="ghost" size="sm" onClick={() => navigate('/')}>
-                    <ArrowLeft className="w-4 h-4 mr-2" /> Back to Dashboard
+                <Button variant="ghost" size="sm" onClick={() => navigate('/assessments')}>
+                    <ArrowLeft className="w-4 h-4 mr-2" /> Back to Assessments
                 </Button>
                 <div className="flex justify-between items-start">
                     <div>
                         <h1 className="text-3xl font-bold tracking-tight">Systemic Assessment</h1>
                         <p className="text-muted-foreground mt-1">
-                            Investigating: <span className="font-semibold text-foreground">{incident.title}</span>
+                            Assessing: <span className="font-semibold text-foreground">{incident.title}</span>
                         </p>
                     </div>
                     <div className="text-right">

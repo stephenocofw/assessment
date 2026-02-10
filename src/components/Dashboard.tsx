@@ -31,14 +31,14 @@ export function Dashboard() {
                     <p className="text-muted-foreground">Monitor safety performance and systemic health.</p>
                 </div>
                 <Button onClick={() => navigate('/report')}>
-                    <Plus className="mr-2 h-4 w-4" /> New Incident
+                    <Plus className="mr-2 h-4 w-4" /> Report Incident
                 </Button>
             </div>
 
             {/* Stats Cards */}
             <div className="grid gap-4 md:grid-cols-2">
                 <StatsCard
-                    title="Open Investigations"
+                    title="Open Assessments"
                     value={investigatingCount}
                     icon={<AlertTriangle className="h-4 w-4 text-amber-500" />}
                     description="Requires systemic assessment"
@@ -62,7 +62,7 @@ export function Dashboard() {
                 <h3 className="text-xl font-semibold">Recent Activity</h3>
                 <div className="grid gap-4">
                     {incidents.slice(0, 5).map(incident => (
-                        <Card key={incident.id} className="hover:bg-accent/5 transition-colors cursor-pointer" onClick={() => navigate(`/investigations/${incident.id}`)}>
+                        <Card key={incident.id} className="hover:bg-accent/5 transition-colors cursor-pointer" onClick={() => navigate(`/assessments/${incident.id}`)}>
                             <CardContent className="p-6 flex items-center justify-between">
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2">

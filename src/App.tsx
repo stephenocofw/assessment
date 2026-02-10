@@ -5,6 +5,8 @@ import { Dashboard } from './components/Dashboard';
 import { InitialReportForm } from './components/forms/InitialReportForm';
 import { InvestigationForm } from './components/forms/InvestigationForm';
 import { InvestigationList } from './components/InvestigationList';
+import { TriageList } from './components/TriageList';
+import { TriageDetail } from './components/TriageDetail';
 import { Settings } from './components/Settings';
 import { MarketingPage } from './components/MarketingPage';
 import { TrendsPage } from './components/analytics/TrendsPage';
@@ -25,10 +27,12 @@ function App() {
           }>
             <Route path="/" element={<Dashboard />} />
             <Route path="/report" element={<InitialReportForm />} />
-            <Route path="/investigations" element={<InvestigationList />} />
+            <Route path="/triage" element={<TriageList />} />
+            <Route path="/triage/:id" element={<TriageDetail />} />
+            <Route path="/assessments" element={<InvestigationList />} />
             <Route path="/trends" element={<TrendsPage />} />
             <Route path="/settings" element={<Settings />} />
-            <Route path="/investigations/:id" element={<InvestigationForm />} />
+            <Route path="/assessments/:id" element={<InvestigationForm />} />
           </Route>
         </Routes>
       </Router>

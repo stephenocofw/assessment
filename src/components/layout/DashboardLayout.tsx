@@ -1,8 +1,9 @@
 import { type ReactNode } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { LayoutDashboard, FilePlus, ClipboardList, Menu, Sun, Moon, Settings as SettingsIcon, TrendingUp } from 'lucide-react';
+import { LayoutDashboard, ClipboardList, Menu, Sun, Moon, Settings as SettingsIcon, TrendingUp, Stethoscope } from 'lucide-react';
 import { clsx } from 'clsx';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { useIncidents } from '../../context/IncidentContext';
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
     // Theme state (lifted from App.tsx or managed here if specific to dashboard, 
@@ -36,12 +37,25 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
         }
     };
 
-    // Ensure theme is applied on mount (in case we navigated from marketing page)
+    // Ensure theme is applied on mount
     useEffect(() => {
         const root = window.document.documentElement;
         if (isDarkMode) root.classList.add('dark');
         else root.classList.remove('dark');
     }, [isDarkMode]);
+
+    const { incidents } = useIncidents();
+
+    const pendingTriageCount = useMemo(() => {
+        return incidents.filter(i =>
+            (i.medicalTreatment || i.potentialSIF) &&
+            i.status === 'Open'
+        ).length;
+    }, [incidents]);
+
+    const activeAssessmentCount = useMemo(() => {
+        return incidents.filter(i => i.status === 'Investigating').length;
+    }, [incidents]);
 
     return (
         <div className="min-h-screen bg-background text-foreground flex">
@@ -60,8 +74,9 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
 
                     <nav className="space-y-1">
                         <NavLink to="/" icon={<LayoutDashboard size={20} />} label="Dashboard" />
-                        <NavLink to="/report" icon={<FilePlus size={20} />} label="New Report" />
-                        <NavLink to="/investigations" icon={<ClipboardList size={20} />} label="Investigations" />
+                        {/* <NavLink to="/report" icon={<FilePlus size={20} />} label="New Report" /> */}
+                        <NavLink to="/triage" icon={<Stethoscope size={20} />} label="Triage" count={pendingTriageCount} />
+                        <NavLink to="/assessments" icon={<ClipboardList size={20} />} label="Assessments" count={activeAssessmentCount} />
                         <NavLink to="/trends" icon={<TrendingUp size={20} />} label="Trends" />
                         <NavLink to="/settings" icon={<SettingsIcon size={20} />} label="Settings" />
                     </nav>
@@ -99,9 +114,13 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
     );
 }
 
-function NavLink({ to, icon, label }: { to: string; icon: React.ReactNode; label: string }) {
+function NavLink({ to, icon, label, count }: { to: string; icon: React.ReactNode; label: string; count?: number }) {
     const location = useLocation();
-    const isActive = location.pathname === to;
+    // Active if exact match OR if it's a nested route (e.g. /assessments/123 matches /assessments)
+    // Exception: Dashboard (/) should only match exactly /
+    const isActive = to === '/'
+        ? location.pathname === '/'
+        : location.pathname.startsWith(to);
 
     return (
         <Link
@@ -114,7 +133,12 @@ function NavLink({ to, icon, label }: { to: string; icon: React.ReactNode; label
             )}
         >
             {icon}
-            <span className="text-sm font-medium">{label}</span>
+            <span className="text-sm font-medium flex-1">{label}</span>
+            {count !== undefined && count > 0 && (
+                <span className="bg-primary/10 text-primary text-xs font-bold px-2 py-0.5 rounded-full">
+                    {count}
+                </span>
+            )}
         </Link>
     );
 }

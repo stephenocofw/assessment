@@ -31,7 +31,7 @@ export interface Incident {
     workTypeId?: string;
     worksiteId?: string;
     needsInvestigation: boolean;
-    status: 'Triage' | 'Investigating' | 'Closed';
+    status: 'Open' | 'Triage' | 'Investigating' | 'Closed';
     medicalTreatment?: boolean;
     potentialSIF?: boolean;
     potentialSIFWhy?: string;

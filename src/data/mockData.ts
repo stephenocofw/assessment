@@ -126,23 +126,30 @@ export const MOCK_INCIDENTS: Incident[] = [
         id: 'inc-001',
         date: getRecentDate(2), // 2 days ago
         title: 'Drill Rig Uncontrolled Movement',
-        whatHappened: 'At approximately 22:30 hrs, a drill rig operating on the pit floor experienced an uncontrolled movement when the rig began to roll backwards approximately one metre during set-up. The operator engaged the emergency brake and stopped the movement. No injuries or damage occurred.',
-        cause: 'Initial assessment indicates the rig was not fully secured on level ground prior to set-up. Ground conditions were uneven and the park brake may not have been fully engaged.',
-        prevention: 'The operator responded quickly by applying the emergency brake. No personnel were positioned behind the rig, and the area had been partially barricaded.',
-        initialActions: 'Remove the drill rig from service until braking systems are inspected. Review set-up procedures for drilling on uneven ground.',
+        whatHappened: 'During night shift set-up at Pit A (Bench 2), Drill Rig 04 experienced an uncontrolled backward movement. The operator had positioned the rig and was in the process of lowering the jacks when the unit shifted and rolled approx 1.5m backwards. The operator immediately engaged the emergency brake, bringing the unit to a halt. The area was lit by mobile lighting towers, but shadows were present.',
+        cause: 'Initial inspection suggests the rig was positioned on ground that appeared level but had a slight gradient obscured by soft material. The park brake was engaged, but the weight shift during jacking overcame the static friction before the jacks fully took the load.',
+        prevention: 'The operator\'s quick reaction to hit the E-stop/Emergency Brake prevented the rig from rolling further into the exclusion zone. No other personnel were in the line of fire.',
+        initialActions: 'Rig tagged out of service. Area barricaded. Geotech team requested to assess bench stability. All crews stood down for a safety share regarding ground assessment.',
+        workTypeId: 'wt-001', // Drilling
+        worksiteId: 'ws-001', // Pit A
         needsInvestigation: true,
+        potentialSIF: true,
+        potentialSIFWhy: 'Uncontrolled movement of heavy plant on a bench could have led to a rollover or collision with light vehicles.',
         status: 'Investigating'
     },
     {
         id: 'inc-002',
         date: getRecentDate(5), // 5 days ago
         title: 'Hand Injury at Conveyor',
-        whatHappened: 'At approximately 14:15 hrs, an operator sustained a minor hand injury while changing a conveyor roller in the processing plant. The operator’s glove was caught briefly between the roller and frame, resulting in a minor laceration requiring first aid treatment. The task was stopped immediately.',
-        cause: 'The task was conducted without adequate use of a tool to position the roller, requiring the operator to place their hand close to a pinch point.',
-        prevention: 'The conveyor was isolated and locked out correctly, preventing any unexpected movement. The operator withdrew their hand quickly.',
-        initialActions: 'Review the JHA with the crew, focusing on pinch point controls. Reinforce the use of appropriate tools.',
+        whatHappened: 'While replacing a return roller on CV-02 in the secondary crushing circuit, a trades assistant sustained a laceration to the right hand. The IP was manually positioning the roller into the bracket when it slipped, trapping their gloved hand between the roller shaft and the frame structure. The glove was torn, resulting in a 3cm laceration to the dorsal aspect of the hand.',
+        cause: 'The roller weighs approx 25kg and is awkward to position manually. The IP was trying to align it by hand instead of using a pry bar or lifting aid. poor access due to adjacent guarding rails restricted movement.',
+        prevention: 'The conveyor was fully isolated as per procedure, preventing any rotation injuries. The IP was wearing impact-resistant gloves which likely prevented a fracture.',
+        initialActions: 'IP escorted to medical center for suturing. Task suspended. Maintenance supervisor reviewing manual handling method for this specific roller location.',
+        workTypeId: 'wt-004', // Processing
+        worksiteId: 'ws-004', // Plant
         needsInvestigation: true,
-        status: 'Triage'
+        medicalTreatment: true,
+        status: 'Open'
     },
     {
         id: 'inc-003',
@@ -158,36 +165,46 @@ export const MOCK_INCIDENTS: Incident[] = [
     // Historical Data for Trends
     {
         id: 'inc-004',
-        date: getRecentDate(35), // 35 days ago
+        date: getRecentDate(0), // Today
         title: 'Hydraulic Hose Failure',
-        whatHappened: 'Hydraulic hose burst on Excavator 04 during loading operations. containment bunds prevented environmental contamination.',
-        cause: 'Fatigue failure of the hose assembly.',
-        prevention: 'Bunds were in place. Operator hit E-stop immediately.',
-        initialActions: 'Replace hose and clean up spill.',
+        whatHappened: 'At 11:45 this morning, Excavator EX-04 suffered a catastrophic failure of the main boom lift cylinder hose during truck loading. A high-pressure spray of hydraulic oil was released, contacting the hot engine exhaust manifold. Smoke was observed, but no fire ignited. Approximately 80L of oil was lost to ground.',
+        cause: 'The hose assembly appears to have failed due to fatigue at the crimp fitting. Maintenance records show this hose was flagged for "monitoring" 2 weeks ago due to minor cover abrasion but wasn\'t scheduled for replacement until next service.',
+        prevention: 'The fire suppression system was manual-ready but not triggered as no flame was visible. The operator ceased operations immediately and slewed away from the truck. Containment bunds in the loading area captured the majority of the spill.',
+        initialActions: 'EX-04 shut down and isolated. Spill kit deployed to capture residual oil. Environmental team notified. Hose assembly removed for failure analysis by supplier.',
+        workTypeId: 'wt-002', // Hauling/Loading
+        worksiteId: 'ws-001', // Pit A
         needsInvestigation: true,
-        status: 'Closed'
+        potentialSIF: true,
+        potentialSIFWhy: 'High pressure oil spray on hot surfaces is a primary cause of machine fires. If ignited, the operator would have been at high risk.',
+        status: 'Open'
     },
     {
         id: 'inc-005',
-        date: getRecentDate(45), // 45 days ago
+        date: getRecentDate(1), // Yesterday
         title: 'Light Vehicle Interaction',
-        whatHappened: 'LV reversed into a bollard at the workshop parking area. Minor damage to rear bumper.',
-        cause: 'Driver distraction / blind spot.',
-        prevention: 'Low speed.',
-        initialActions: 'Fit reverse cameras to all LVs.',
+        whatHappened: 'During shift changeover at the workshop car park, LV-22 (Toyota Hilux) reversed into a concrete bollard. The driver was attempting to reverse park into Bay 4. The rear bumper and tailgate sustained moderate damage. No injuries to the driver or passenger.',
+        cause: 'Driver stated they checked mirrors but did not see the bollard. The time of day (16:30) meant the sun was low and causing significant glare on the reversing camera screen, rendering it ineffective. The bollard is below the tray line and not visible in side mirrors when close.',
+        prevention: 'Low speed (<5km/h) meant the impact was low energy. Seatbelts were worn.',
+        initialActions: 'LV taken to workshop for damage assessment. Driver sent for D&A test (negative). Parking bay closed off to check if bollard height meets visibility standards.',
+        workTypeId: 'wt-003', // Maintenance
+        worksiteId: 'ws-003', // Workshop
         needsInvestigation: true,
-        status: 'Closed'
+        status: 'Investigating'
     },
     {
         id: 'inc-006',
-        date: getRecentDate(60), // 60 days ago
+        date: getRecentDate(3), // 3 days ago
         title: 'Dropped Object from Height',
-        whatHappened: 'A wrench was dropped from the processing plant walkway during maintenance. No one was below.',
-        cause: 'Tool lanyard was not used.',
-        prevention: 'Exclusion zone was in place below the work area.',
-        initialActions: 'Reinforce tool lanyard use.',
+        whatHappened: 'A 24mm combination spanner was dropped from the level 3 walkway of the Screen House to the ground floor (approx 8m drop). The tool landed in a designated walkway. Fortunately, the area had been flagged off as an exclusion zone, so no personnel were struck.',
+        cause: 'The fitter was tightening a flange bolt when the spanner slipped. They were not using a tool lanyard despite working outside the handrails. The gloves used were noted to be oily from a previous task, contributing to the loss of grip.',
+        prevention: 'The effective establishment of a "Red Tape" exclusion zone below the work area was the primary control that prevented injury. A spotter was also in place.',
+        initialActions: 'Work stopped. All tools retrieved. Team held an immediate stand-down to check all tools for lanyard attachment points. Fitter retrained on "Drops" policy.',
+        workTypeId: 'wt-003', // Maintenance
+        worksiteId: 'ws-004', // Plant
         needsInvestigation: true,
-        status: 'Closed'
+        potentialSIF: true,
+        potentialSIFWhy: '2.5kg spanner dropped 8m could have been fatal if it struck a person below.',
+        status: 'Investigating'
     },
     {
         id: 'inc-007',

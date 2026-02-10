@@ -3,55 +3,57 @@ import { useIncidents } from '../context/IncidentContext';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader } from './ui/card';
 import { Button } from './ui/button';
-import { ArrowRight, ArrowUpDown, ChevronDown, ChevronUp, FileText, CheckCircle2, Clock, Search } from 'lucide-react';
+import { ArrowRight, ArrowUpDown, ChevronDown, ChevronUp, Search, Stethoscope, ShieldAlert } from 'lucide-react';
 import { clsx } from 'clsx';
 import { Input } from './ui/input';
 
 type SortKey = 'date' | 'title' | 'status';
 type SortDirection = 'asc' | 'desc';
 
-export function InvestigationList() {
-    const { incidents, investigations } = useIncidents();
+export function TriageList() {
+    const { incidents } = useIncidents();
     const navigate = useNavigate();
 
     // State for filtering and sorting
     const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState<'All' | 'Pending Start' | 'In Progress' | 'Completed'>('All');
+    const [statusFilter, setStatusFilter] = useState<'All' | 'Pending' | 'Triaged'>('Pending');
     const [sortConfig, setSortConfig] = useState<{ key: SortKey; direction: SortDirection }>({ key: 'date', direction: 'desc' });
+
+    // Filter Incidents: Must have Medical Treatment OR Potential SIF
+    const triageAttributes = useMemo(() => {
+        return incidents.filter(i => i.medicalTreatment || i.potentialSIF);
+    }, [incidents]);
 
     // Combine data for the table
     const tableData = useMemo(() => {
-        return incidents
-            .filter(i => i.needsInvestigation || i.status === 'Investigating' || investigations.some(inv => inv.incidentId === i.id))
-            .map(incident => {
-                const inv = investigations.find(i => i.incidentId === incident.id);
-                let statusLabel = 'Pending Start';
-                let statusColor = 'text-amber-600 bg-amber-50';
-                let StatusIcon = Clock;
+        return triageAttributes.map(incident => {
+            // Determine "Status" based on if it has been classified (severity/recordable)
+            // Or if it has moved to "Investigating" stage
+            let statusLabel = 'Pending Triage';
+            let statusColor = 'text-amber-600 bg-amber-50';
 
-                if (inv) {
-                    if (inv.status === 'Submitted') {
-                        statusLabel = 'Completed';
-                        statusColor = 'text-emerald-600 bg-emerald-50';
-                        StatusIcon = CheckCircle2;
-                    } else {
-                        statusLabel = 'In Progress';
-                        statusColor = 'text-blue-600 bg-blue-50';
-                        StatusIcon = FileText;
-                    }
-                }
+            if (incident.status === 'Investigating' || incident.status === 'Closed') {
+                statusLabel = 'Triaged';
+                statusColor = 'text-emerald-600 bg-emerald-50';
+            } else if (incident.severity || incident.recordableType) {
+                // If partially classified but not yet moved to investigating
+                statusLabel = 'In Progress';
+                statusColor = 'text-blue-600 bg-blue-50';
+            }
 
-                return {
-                    id: incident.id,
-                    date: incident.date,
-                    title: incident.title,
-                    description: incident.whatHappened,
-                    status: statusLabel,
-                    statusColor,
-                    StatusIcon
-                };
-            });
-    }, [incidents, investigations]);
+            return {
+                id: incident.id,
+                date: incident.date,
+                title: incident.title,
+                description: incident.whatHappened,
+                status: statusLabel,
+                statusColor,
+                medicalTreatment: incident.medicalTreatment,
+                potentialSIF: incident.potentialSIF,
+                severity: incident.severity
+            };
+        });
+    }, [triageAttributes]);
 
     // Apply Filters and Sort
     const filteredAndSortedData = useMemo(() => {
@@ -66,9 +68,13 @@ export function InvestigationList() {
             );
         }
 
-        // 2. Filter by Status
+        // 2. Filter by Status (Simple mapping for now)
         if (statusFilter !== 'All') {
-            data = data.filter(item => item.status === statusFilter);
+            if (statusFilter === 'Pending') {
+                data = data.filter(item => item.status === 'Pending Triage' || item.status === 'In Progress');
+            } else {
+                data = data.filter(item => item.status === 'Triaged');
+            }
         }
 
         // 3. Sort
@@ -100,8 +106,8 @@ export function InvestigationList() {
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Assessments</h2>
-                    <p className="text-muted-foreground">Manage ongoing systemic assessments.</p>
+                    <h2 className="text-3xl font-bold tracking-tight">Incident Triage</h2>
+                    <p className="text-muted-foreground">Review and classify critical incidents (Medical / SIF).</p>
                 </div>
             </div>
 
@@ -111,14 +117,14 @@ export function InvestigationList() {
                         <div className="relative w-full md:w-80">
                             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                             <Input
-                                placeholder="Search assessments..."
+                                placeholder="Search triage..."
                                 className="pl-9"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
                         <div className="flex gap-2 bg-muted/50 p-1 rounded-lg self-start">
-                            {(['All', 'Pending Start', 'In Progress', 'Completed'] as const).map(filter => (
+                            {(['All', 'Pending', 'Triaged'] as const).map(filter => (
                                 <button
                                     key={filter}
                                     onClick={() => setStatusFilter(filter)}
@@ -156,6 +162,7 @@ export function InvestigationList() {
                                             Incident {getSortIcon('title')}
                                         </button>
                                     </th>
+                                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Flags</th>
                                     <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
                                         <button
                                             className="flex items-center hover:text-foreground transition-colors"
@@ -169,40 +176,50 @@ export function InvestigationList() {
                             </thead>
                             <tbody className="[&_tr:last-child]:border-0">
                                 {filteredAndSortedData.length > 0 ? (
-                                    filteredAndSortedData.map((item) => {
-                                        const StatusIcon = item.StatusIcon;
-                                        return (
-                                            <tr
-                                                key={item.id}
-                                                className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted cursor-pointer group"
-                                                onClick={() => navigate(`/assessments/${item.id}`)}
-                                            >
-                                                <td className="p-4 align-middle">
-                                                    <div className="font-medium whitespace-nowrap text-muted-foreground">{item.date}</div>
-                                                </td>
-                                                <td className="p-4 align-middle">
-                                                    <div className="font-medium">{item.title}</div>
-                                                    <div className="text-xs text-muted-foreground line-clamp-1">{item.description}</div>
-                                                </td>
-                                                <td className="p-4 align-middle">
-                                                    <span className={clsx("inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium", item.statusColor)}>
-                                                        <StatusIcon className="w-3.5 h-3.5" />
-                                                        {item.status}
-                                                    </span>
-                                                </td>
-                                                <td className="p-4 align-middle text-right">
-                                                    <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        {item.status === 'Completed' ? 'View' : 'Open'}
-                                                        <ArrowRight className="ml-2 w-3 h-3" />
-                                                    </Button>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })
+                                    filteredAndSortedData.map((item) => (
+                                        <tr
+                                            key={item.id}
+                                            className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted cursor-pointer group"
+                                            onClick={() => navigate(`/triage/${item.id}`)}
+                                        >
+                                            <td className="p-4 align-middle">
+                                                <div className="font-medium whitespace-nowrap text-muted-foreground">{item.date}</div>
+                                            </td>
+                                            <td className="p-4 align-middle">
+                                                <div className="font-medium">{item.title}</div>
+                                                <div className="text-xs text-muted-foreground line-clamp-1">{item.description}</div>
+                                            </td>
+                                            <td className="p-4 align-middle">
+                                                <div className="flex gap-2">
+                                                    {item.medicalTreatment && (
+                                                        <div className="p-1.5 bg-amber-100 text-amber-700 rounded-md" title="Medical Treatment">
+                                                            <Stethoscope className="w-4 h-4" />
+                                                        </div>
+                                                    )}
+                                                    {item.potentialSIF && (
+                                                        <div className="p-1.5 bg-red-100 text-red-700 rounded-md" title="Potential SIF">
+                                                            <ShieldAlert className="w-4 h-4" />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </td>
+                                            <td className="p-4 align-middle">
+                                                <span className={clsx("inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium", item.statusColor)}>
+                                                    {item.status}
+                                                </span>
+                                            </td>
+                                            <td className="p-4 align-middle text-right">
+                                                <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    Review
+                                                    <ArrowRight className="ml-2 w-3 h-3" />
+                                                </Button>
+                                            </td>
+                                        </tr>
+                                    ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={4} className="h-24 text-center align-middle text-muted-foreground">
-                                            No assessments found.
+                                        <td colSpan={5} className="h-24 text-center align-middle text-muted-foreground">
+                                            No incidents requiring triage found.
                                         </td>
                                     </tr>
                                 )}
@@ -210,7 +227,7 @@ export function InvestigationList() {
                         </table>
                     </div>
                     <div className="p-4 border-t text-xs text-muted-foreground">
-                        Showing {filteredAndSortedData.length} assessments.
+                        Showing {filteredAndSortedData.length} incidents.
                     </div>
                 </CardContent>
             </Card>

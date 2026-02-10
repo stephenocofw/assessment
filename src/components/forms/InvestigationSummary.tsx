@@ -60,7 +60,7 @@ export function InvestigationSummary({ incident, timelineEvents, assessments }: 
                 <div className="border-b pb-6">
                     <div className="flex justify-between items-start">
                         <div>
-                            <h1 className="text-3xl font-bold tracking-tight text-primary">Systemic Investigation Report</h1>
+                            <h1 className="text-3xl font-bold tracking-tight text-primary">Systemic Assessment Report</h1>
                             <p className="text-muted-foreground mt-2 text-lg">{incident.title}</p>
                         </div>
                         <div className="text-right">
