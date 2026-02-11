@@ -40,11 +40,6 @@ export default {
                     DEFAULT: "hsl(var(--card))",
                     foreground: "hsl(var(--card-foreground))",
                 },
-                brand: {
-                    yellow: "#FFEE00", // Bright Safety Yellow
-                    blue: "#0033CC",   // Deep Royal Blue
-                    gray: "#F4F4F5",   // Light Sidebar Gray
-                },
             },
             borderRadius: {
                 lg: "var(--radius)",
