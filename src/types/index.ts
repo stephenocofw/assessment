@@ -6,6 +6,8 @@ export interface Factor {
     capacity: Capacity;
     description: string;
     helpText: string;
+    focusQuestion?: string;
+    focusPrompts?: string[];
 }
 
 export type RelevanceStatus = 'Relevant' | 'Not Relevant' | 'Unsure';

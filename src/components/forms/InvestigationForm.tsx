@@ -11,6 +11,8 @@ import { Button } from '../ui/button';
 import { Card, CardHeader, CardTitle, CardDescription } from '../ui/card';
 import { ArrowLeft, Save } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
+import { FocusModeOverlay } from '../FocusModeOverlay';
+import { Target } from 'lucide-react';
 
 export function InvestigationForm() {
     const { id } = useParams<{ id: string }>();
@@ -33,7 +35,8 @@ export function InvestigationForm() {
         existingInvestigation?.timeline || [] // Load existing or empty
     );
 
-    const [activeTab, setActiveTab] = useState<'Triage' | 'Timeline' | 'Guide' | 'Enable' | 'Execute' | 'Summary'>('Triage');
+    const [isFocusModeOpen, setIsFocusModeOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState<'Triage' | 'Timeline' | 'Systemic Factors' | 'Summary'>('Triage');
 
     if (!incident) {
         return <div className="p-8 text-center">Incident not found</div>;
@@ -103,7 +106,7 @@ export function InvestigationForm() {
 
             {/* Tabs */}
             <div className="flex space-x-1 rounded-xl bg-muted p-1 overflow-x-auto print:hidden">
-                {(['Triage', 'Timeline', 'Guide', 'Enable', 'Execute', 'Summary'] as const).map((tab) => (
+                {(['Triage', 'Timeline', 'Systemic Factors', 'Summary'] as const).map((tab) => (
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
@@ -137,25 +140,89 @@ export function InvestigationForm() {
                     </div>
                 ) : (
                     <>
-                        <div className="prose prose-sm max-w-none mb-6">
-                            <h3 className="text-xl font-semibold">
-                                {activeTab} Factors
-                            </h3>
-                            <p className="text-muted-foreground">
-                                {activeTab === 'Guide' && "Identify if leadership, strategy, or risk signals influenced the work."}
-                                {activeTab === 'Enable' && "Identify if resources, systems, or conflicts hindered safe execution."}
-                                {activeTab === 'Execute' && "Identify how work was actually done, including adaptations and decisions."}
-                            </p>
+                        <div className="prose prose-sm max-w-none mb-6 flex justify-between items-start">
+                            <div className="prose prose-sm max-w-none mb-6">
+                                <h3 className="text-xl font-semibold">
+                                    {activeTab}
+                                </h3>
+                                <p className="text-muted-foreground">
+                                    Review all 15 factors. Use Focus Mode for a guided questionnaire.
+                                </p>
+                            </div>
+                            <Button onClick={() => setIsFocusModeOpen(true)} className="gap-2 bg-indigo-600 hover:bg-indigo-700 text-white">
+                                <Target className="w-4 h-4" />
+                                Focus Mode
+                            </Button>
                         </div>
 
-                        {factorsByCapacity[activeTab].map(factor => (
-                            <FactorAssessmentCard
-                                key={factor.id}
-                                factor={factor}
-                                assessment={assessments[factor.id]}
-                                onChange={handleAssessmentChange}
-                            />
-                        ))}
+                        <FocusModeOverlay
+                            isOpen={isFocusModeOpen}
+                            onClose={() => setIsFocusModeOpen(false)}
+                            assessments={assessments}
+                            onUpdateAssessment={handleAssessmentChange}
+                        />
+
+                        <div className="space-y-12">
+                            {/* Guide Section */}
+                            <section className="space-y-6">
+                                <div className="prose prose-sm max-w-none border-b pb-4">
+                                    <h3 className="text-xl font-semibold text-primary">Guide Factors</h3>
+                                    <p className="text-muted-foreground">
+                                        Identify if leadership, strategy, or risk signals influenced the work.
+                                    </p>
+                                </div>
+                                <div className="space-y-4">
+                                    {factorsByCapacity.Guide.map(factor => (
+                                        <FactorAssessmentCard
+                                            key={factor.id}
+                                            factor={factor}
+                                            assessment={assessments[factor.id]}
+                                            onChange={handleAssessmentChange}
+                                        />
+                                    ))}
+                                </div>
+                            </section>
+
+                            {/* Enable Section */}
+                            <section className="space-y-6">
+                                <div className="prose prose-sm max-w-none border-b pb-4">
+                                    <h3 className="text-xl font-semibold text-primary">Enable Factors</h3>
+                                    <p className="text-muted-foreground">
+                                        Identify if resources, systems, or conflicts hindered safe execution.
+                                    </p>
+                                </div>
+                                <div className="space-y-4">
+                                    {factorsByCapacity.Enable.map(factor => (
+                                        <FactorAssessmentCard
+                                            key={factor.id}
+                                            factor={factor}
+                                            assessment={assessments[factor.id]}
+                                            onChange={handleAssessmentChange}
+                                        />
+                                    ))}
+                                </div>
+                            </section>
+
+                            {/* Execute Section */}
+                            <section className="space-y-6">
+                                <div className="prose prose-sm max-w-none border-b pb-4">
+                                    <h3 className="text-xl font-semibold text-primary">Execute Factors</h3>
+                                    <p className="text-muted-foreground">
+                                        Identify how work was actually done, including adaptations and decisions.
+                                    </p>
+                                </div>
+                                <div className="space-y-4">
+                                    {factorsByCapacity.Execute.map(factor => (
+                                        <FactorAssessmentCard
+                                            key={factor.id}
+                                            factor={factor}
+                                            assessment={assessments[factor.id]}
+                                            onChange={handleAssessmentChange}
+                                        />
+                                    ))}
+                                </div>
+                            </section>
+                        </div>
                     </>
                 )}
 
@@ -165,10 +232,8 @@ export function InvestigationForm() {
                         variant="outline"
                         onClick={() => {
                             if (activeTab === 'Timeline') setActiveTab('Triage');
-                            if (activeTab === 'Guide') setActiveTab('Timeline');
-                            if (activeTab === 'Enable') setActiveTab('Guide');
-                            if (activeTab === 'Execute') setActiveTab('Enable');
-                            if (activeTab === 'Summary') setActiveTab('Execute');
+                            if (activeTab === 'Systemic Factors') setActiveTab('Timeline');
+                            if (activeTab === 'Summary') setActiveTab('Systemic Factors');
                         }}
                         disabled={activeTab === 'Triage'}
                     >
@@ -178,10 +243,8 @@ export function InvestigationForm() {
                     {activeTab !== 'Summary' ? (
                         <Button onClick={() => {
                             if (activeTab === 'Triage') setActiveTab('Timeline');
-                            if (activeTab === 'Timeline') setActiveTab('Guide');
-                            if (activeTab === 'Guide') setActiveTab('Enable');
-                            if (activeTab === 'Enable') setActiveTab('Execute');
-                            if (activeTab === 'Execute') setActiveTab('Summary');
+                            if (activeTab === 'Timeline') setActiveTab('Systemic Factors');
+                            if (activeTab === 'Systemic Factors') setActiveTab('Summary');
                         }}>
                             Next Section <IconArrowRight className="ml-2 w-4 h-4" />
                         </Button>

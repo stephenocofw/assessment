@@ -8,35 +8,65 @@ export const FORGE_WORKS_FACTORS: Factor[] = [
         name: 'Senior Leadership',
         capacity: 'Guide',
         description: 'Priorities, messaging, and visible behaviors.',
-        helpText: 'Did senior leadership direction or behaviours influence how work was planned or carried out?'
+        helpText: 'Did senior leadership direction or behaviours influence how work was planned or carried out?',
+        focusQuestion: 'Did leadership priorities, messages, or behaviours influence how this work was planned or carried out?',
+        focusPrompts: [
+            'Was safety seen as competing with production or delivery?',
+            'Were signals from leadership unclear, absent, or contradictory?',
+            'Would leadership recognise this situation as acceptable?'
+        ]
     },
     {
         id: 'guide-strategy',
         name: 'Strategy',
         capacity: 'Guide',
         description: 'Strategic objectives and organizational goals.',
-        helpText: 'Did organisational strategy or goals influence the conditions under which the work was done?'
+        helpText: 'Did organisational strategy or goals influence the conditions under which the work was done?',
+        focusQuestion: 'Did organisational goals, targets, or initiatives influence decisions related to this work?',
+        focusPrompts: [
+            'Were cost, schedule, or output targets influencing behaviour?',
+            'Was this work aligned (or misaligned) with stated safety strategy?',
+            'Did strategic priorities shape risk tolerance?'
+        ]
     },
     {
         id: 'guide-risk',
         name: 'Risk Management',
         capacity: 'Guide',
         description: 'Risk understanding, anticipation, and frameworks.',
-        helpText: 'Did the way risks were identified, assessed, or managed contribute to the incident?'
+        helpText: 'Did the way risks were identified, assessed, or managed contribute to the incident?',
+        focusQuestion: 'Were risks related to this task or situation identified, understood, and managed beforehand?',
+        focusPrompts: [
+            'Was the risk known but accepted?',
+            'Had conditions changed since the risk was assessed?',
+            'Were controls based on assumptions that no longer held?'
+        ]
     },
     {
         id: 'guide-safety-org',
         name: 'Safety Organisation',
         capacity: 'Guide',
         description: 'Structure and capability of the safety function.',
-        helpText: 'Did the safety function or safety governance influence how this work was set up or managed?'
+        helpText: 'Did the safety function or safety governance influence how this work was set up or managed?',
+        focusQuestion: 'Did the safety function or support model influence how this work was planned, supported, or monitored?',
+        focusPrompts: [
+            'Was safety advice timely and practical?',
+            'Were roles and responsibilities clear?',
+            'Was safety engaged before, during, or only after the event?'
+        ]
     },
     {
         id: 'guide-work-understanding',
         name: 'Work Understanding',
         capacity: 'Guide',
         description: 'Insight into how real work actually happens.',
-        helpText: 'Did gaps in understanding how work is actually done contribute to the incident?'
+        helpText: 'Did gaps in understanding how work is actually done contribute to the incident?',
+        focusQuestion: 'Was there a difference between how the work was planned and how it was actually carried out?',
+        focusPrompts: [
+            'Did procedures reflect real conditions?',
+            'Were adaptations required to get the job done?',
+            'Did assumptions about “normal work” prove incorrect?'
+        ]
     },
 
     // ENABLE
@@ -45,35 +75,65 @@ export const FORGE_WORKS_FACTORS: Factor[] = [
         name: 'Operational Management',
         capacity: 'Enable',
         description: 'Planning, scheduling, and supervision.',
-        helpText: 'Did the way work was planned, scheduled, or supervised contribute to the incident?'
+        helpText: 'Did the way work was planned, scheduled, or supervised contribute to the incident?',
+        focusQuestion: 'Did planning, supervision, or coordination affect how the work was performed?',
+        focusPrompts: [
+            'Was the work well prepared and sequenced?',
+            'Was supervision available and effective?',
+            'Were competing activities managed?'
+        ]
     },
     {
         id: 'enable-resource',
         name: 'Resource Allocation',
         capacity: 'Enable',
         description: 'Time, budget, equipment, and people.',
-        helpText: 'Did resourcing decisions influence how safely the work could be done?'
+        helpText: 'Did resourcing decisions influence how safely the work could be done?',
+        focusQuestion: 'Were time, staffing, equipment, or tools adequate for the task and conditions?',
+        focusPrompts: [
+            'Were people rushed or stretched?',
+            'Was equipment unavailable, unsuitable, or unreliable?',
+            'Were workarounds needed due to shortages?'
+        ]
     },
     {
         id: 'enable-systems',
         name: 'Management Systems',
         capacity: 'Enable',
         description: 'Procedures, permits, and tools.',
-        helpText: 'Did management systems help or hinder the safe execution of the work?'
+        helpText: 'Did management systems help or hinder the safe execution of the work?',
+        focusQuestion: 'Did systems, procedures, or tools support or hinder safe work?',
+        focusPrompts: [
+            'Were procedures usable and up to date?',
+            'Were systems overly complex or ignored?',
+            'Did the system reflect how work actually happens?'
+        ]
     },
     {
         id: 'enable-tradeoffs',
         name: 'Goal Conflict & Trade-offs',
         capacity: 'Enable',
         description: 'Balancing competing priorities (e.g., production vs safety).',
-        helpText: 'Did competing goals or trade-offs influence decisions during the work?'
+        helpText: 'Did competing goals or trade-offs influence decisions during the work?',
+        focusQuestion: 'Were people balancing competing priorities that affected safety-related decisions?',
+        focusPrompts: [
+            'Speed vs safety?',
+            'Compliance vs practicality?',
+            'Production vs recovery?'
+        ]
     },
     {
         id: 'enable-learning',
         name: 'Learning & Development',
         capacity: 'Enable',
         description: 'Skills, training, and experience.',
-        helpText: 'Did learning, training, or experience levels influence how the work was done?'
+        helpText: 'Did learning, training, or experience levels influence how the work was done?',
+        focusQuestion: 'Did knowledge, skills, experience, or training influence the outcome?',
+        focusPrompts: [
+            'Was training adequate for real conditions?',
+            'Did people rely on experience rather than formal guidance?',
+            'Were lessons from previous incidents applied?'
+        ]
     },
 
     // EXECUTE
@@ -82,35 +142,65 @@ export const FORGE_WORKS_FACTORS: Factor[] = [
         name: 'Frontline Workers',
         capacity: 'Execute',
         description: 'Role, involvement, and agency of workers.',
-        helpText: 'Did frontline actions or adaptations influence the outcome?'
+        helpText: 'Did frontline actions or adaptations influence the outcome?',
+        focusQuestion: 'Did frontline actions, decisions, or adaptations influence how the situation unfolded?',
+        focusPrompts: [
+            'Were actions reasonable given the context?',
+            'Were adaptations necessary to succeed?',
+            'Did experience or judgment play a key role?'
+        ]
     },
     {
         id: 'execute-communication',
         name: 'Communication & Coordination',
         capacity: 'Execute',
         description: 'Information flow and teamwork.',
-        helpText: 'Did communication or coordination influence how the work unfolded?'
+        helpText: 'Did communication or coordination influence how the work unfolded?',
+        focusQuestion: 'Did communication or coordination affect shared understanding or timing of work?',
+        focusPrompts: [
+            'Was information missing, delayed, or misunderstood?',
+            'Were handovers effective?',
+            'Did teams have the same picture of risk?'
+        ]
     },
     {
         id: 'execute-decision',
         name: 'Decision Making',
         capacity: 'Execute',
         description: 'Decisions made under uncertainty or pressure.',
-        helpText: 'Did decision-making during the task influence the incident?'
+        helpText: 'Did decision-making during the task influence the incident?',
+        focusQuestion: 'Were decisions made under uncertainty, time pressure, or incomplete information?',
+        focusPrompts: [
+            'Were assumptions made that later proved incorrect?',
+            'Were options constrained by context?',
+            'Was “best available decision” made at the time?'
+        ]
     },
     {
         id: 'execute-contractor',
         name: 'Contractor Management',
         capacity: 'Execute',
         description: 'Integration and support of contractors.',
-        helpText: 'Did contractor arrangements or interfaces influence the work or risk?'
+        helpText: 'Did contractor arrangements or interfaces influence the work or risk?',
+        focusQuestion: 'Were contractors involved, and did integration or oversight influence the work?',
+        focusPrompts: [
+            'Were expectations clear?',
+            'Were contractors supported and supervised?',
+            'Were site systems aligned with contractor practices?'
+        ]
     },
     {
         id: 'execute-metrics',
         name: 'Monitoring & Metrics',
         capacity: 'Execute',
         description: 'Data used to understand work outcomes.',
-        helpText: 'Did monitoring, metrics, or reporting influence what was noticed or acted on?'
+        helpText: 'Did monitoring, metrics, or reporting influence what was noticed or acted on?',
+        focusQuestion: 'Did monitoring, reporting, or performance measures influence attention or action?',
+        focusPrompts: [
+            'Were warning signs visible but unacted on?',
+            'Did metrics focus attention away from emerging risk?',
+            'Was success or risk invisible to the system?'
+        ]
     }
 ];
 
