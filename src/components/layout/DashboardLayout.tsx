@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { LayoutDashboard, ClipboardList, Menu, Sun, Moon, Settings as SettingsIcon, TrendingUp, Stethoscope } from 'lucide-react';
+import { LayoutDashboard, ClipboardList, Menu, Sun, Moon, Settings as SettingsIcon, TrendingUp, Stethoscope, Users } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useState, useEffect, useMemo } from 'react';
 import { useIncidents } from '../../context/IncidentContext';
@@ -58,23 +58,32 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
     }, [incidents]);
 
     return (
-        <div className="min-h-screen bg-background text-foreground flex">
+        <div className="min-h-screen bg-background text-foreground flex font-sans">
             {/* Sidebar */}
-            <aside className="w-64 border-r border-border bg-card p-4 hidden md:flex flex-col justify-between">
+            <aside className="w-64 border-r border-border/40 bg-[#F9FAFB] p-4 hidden md:flex flex-col justify-between">
                 <div>
-                    <div className="mb-8 px-2">
+                    {/* Logo Area */}
+                    <div className="mb-6 px-2">
                         <Link to="/" className="block">
-                            <h1 className="text-xl font-bold tracking-tight text-primary flex items-center gap-2">
-                                <span className="w-8 h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center">FW</span>
-                                Forge Works
+                            <h1 className="text-2xl font-black tracking-tight text-foreground flex items-center gap-2">
+                                Hiviz.
                             </h1>
-                            <p className="text-xs text-muted-foreground mt-1 ml-10">Systemic Safety</p>
                         </Link>
+                    </div>
+
+                    {/* Team Workspace Card */}
+                    <div className="mb-6 mx-2 p-3 bg-white border border-border/50 rounded-xl flex items-center gap-3 shadow-sm">
+                        <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-600">
+                            <Users size={16} />
+                        </div>
+                        <div>
+                            <div className="text-xs text-muted-foreground font-medium">Team</div>
+                            <div className="text-sm font-semibold text-foreground">Forge Works</div>
+                        </div>
                     </div>
 
                     <nav className="space-y-1">
                         <NavLink to="/" icon={<LayoutDashboard size={20} />} label="Dashboard" />
-                        {/* <NavLink to="/report" icon={<FilePlus size={20} />} label="New Report" /> */}
                         <NavLink to="/triage" icon={<Stethoscope size={20} />} label="Triage" count={pendingTriageCount} />
                         <NavLink to="/assessments" icon={<ClipboardList size={20} />} label="Assessments" count={activeAssessmentCount} />
                         <NavLink to="/trends" icon={<TrendingUp size={20} />} label="Trends" />
@@ -82,11 +91,17 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                     </nav>
                 </div>
 
-                {/* Theme Toggle in Sidebar */}
-                <div className="px-2 pb-4">
+                {/* Theme Toggle & User */}
+                <div className="px-2 pb-4 space-y-4">
+                    <div className="flex items-center gap-3 px-2 py-2">
+                        <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-700">
+                            SO
+                        </div>
+                        <div className="text-sm font-medium">Stephen O.</div>
+                    </div>
                     <button
                         onClick={toggleTheme}
-                        className="flex items-center gap-3 px-3 py-2 w-full rounded-md hover:bg-accent hover:text-accent-foreground text-muted-foreground transition-all duration-200"
+                        className="flex items-center gap-3 px-3 py-2 w-full rounded-md hover:bg-black/5 text-muted-foreground transition-all duration-200"
                     >
                         {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
                         <span className="text-sm font-medium">{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
@@ -95,9 +110,9 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 overflow-auto bg-muted/10">
+            <main className="flex-1 overflow-auto bg-white">
                 <header className="md:hidden border-b border-border p-4 flex items-center justify-between bg-card">
-                    <h1 className="text-lg font-bold">Forge Works</h1>
+                    <h1 className="text-xl font-black">Hiviz.</h1>
                     <div className="flex gap-4 items-center">
                         <button onClick={toggleTheme}>
                             {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
@@ -116,8 +131,6 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
 
 function NavLink({ to, icon, label, count }: { to: string; icon: React.ReactNode; label: string; count?: number }) {
     const location = useLocation();
-    // Active if exact match OR if it's a nested route (e.g. /assessments/123 matches /assessments)
-    // Exception: Dashboard (/) should only match exactly /
     const isActive = to === '/'
         ? location.pathname === '/'
         : location.pathname.startsWith(to);
@@ -126,16 +139,19 @@ function NavLink({ to, icon, label, count }: { to: string; icon: React.ReactNode
         <Link
             to={to}
             className={clsx(
-                "flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200",
+                "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 mx-2",
                 isActive
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "hover:bg-accent hover:text-accent-foreground text-muted-foreground"
+                    ? "bg-brand-yellow text-black font-bold shadow-sm"
+                    : "text-gray-600 hover:bg-black/5 hover:text-black font-medium"
             )}
         >
             {icon}
-            <span className="text-sm font-medium flex-1">{label}</span>
+            <span className="text-sm flex-1">{label}</span>
             {count !== undefined && count > 0 && (
-                <span className="bg-primary/10 text-primary text-xs font-bold px-2 py-0.5 rounded-full">
+                <span className={clsx(
+                    "text-xs font-bold px-2 py-0.5 rounded-md",
+                    isActive ? "bg-black/10 text-black" : "bg-blue-100 text-blue-700"
+                )}>
                     {count}
                 </span>
             )}

@@ -8,9 +8,8 @@ export function MarketingPage() {
             {/* Navigation */}
             <header className="border-b border-border/40 backdrop-blur-sm sticky top-0 z-50 bg-background/80">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-                    <div className="flex items-center gap-2 font-bold text-xl tracking-tight">
-                        <span className="w-8 h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center">FW</span>
-                        Forge Works
+                    <div className="flex items-center gap-2 font-black text-2xl tracking-tight">
+                        Hiviz.<span className="text-muted-foreground text-sm font-normal ml-2">by Forge Works</span>
                     </div>
                     <nav className="hidden md:flex gap-8 text-sm font-medium text-muted-foreground">
                         <a href="#features" className="hover:text-foreground transition-colors">How it Works</a>
@@ -19,7 +18,7 @@ export function MarketingPage() {
                     </nav>
                     <div className="flex items-center gap-4">
                         <Link to="/">
-                            <Button>Launch Demo <ArrowRight className="ml-2 w-4 h-4" /></Button>
+                            <Button className="bg-brand-blue hover:bg-brand-blue/90 text-white font-semibold">Launch Demo <ArrowRight className="ml-2 w-4 h-4" /></Button>
                         </Link>
                     </div>
                 </div>
@@ -45,7 +44,7 @@ export function MarketingPage() {
                     </p>
                     <div className="flex justify-center gap-4 pt-4 animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
                         <Link to="/">
-                            <Button size="lg" className="h-12 px-8 text-lg">
+                            <Button size="lg" className="h-12 px-8 text-lg bg-brand-blue hover:bg-brand-blue/90 text-white font-semibold">
                                 Start Assessment Demo
                             </Button>
                         </Link>
