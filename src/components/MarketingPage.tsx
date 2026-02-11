@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
-import { ArrowRight, ShieldCheck, TrendingUp, BarChart3, Users, History, Clock, LineChart, Settings2 } from 'lucide-react';
+import { ArrowRight, ShieldCheck, TrendingUp, BarChart3, Users, History, Clock, LineChart, Settings2, Target, Layers } from 'lucide-react';
 
 export function MarketingPage() {
     return (
@@ -188,6 +188,38 @@ export function MarketingPage() {
                                     <h3 className="text-xl font-bold">Executive Reporting</h3>
                                     <p className="text-muted-foreground">
                                         One-click, print-ready systemic investigation summaries. Generate beautiful reports that focus on organizational learning.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Feature 5: Guided Focus Mode */}
+                            <div className="group relative overflow-hidden rounded-2xl border bg-muted/20 p-8 transition-all hover:bg-muted/40 hover:shadow-lg">
+                                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                                    <Target className="w-24 h-24" />
+                                </div>
+                                <div className="relative z-10 space-y-4">
+                                    <div className="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                                        <Target className="w-6 h-6" />
+                                    </div>
+                                    <h3 className="text-xl font-bold">Guided Focus Mode</h3>
+                                    <p className="text-muted-foreground">
+                                        Cut through the noise with a guided 15-factor questionnaire. Ensure every systemic angle is evaluated with precision.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Feature 6: Unified Systemic View */}
+                            <div className="group relative overflow-hidden rounded-2xl border bg-muted/20 p-8 transition-all hover:bg-muted/40 hover:shadow-lg">
+                                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                                    <Layers className="w-24 h-24" />
+                                </div>
+                                <div className="relative z-10 space-y-4">
+                                    <div className="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                                        <Layers className="w-6 h-6" />
+                                    </div>
+                                    <h3 className="text-xl font-bold">Unified Systemic View</h3>
+                                    <p className="text-muted-foreground">
+                                        See the whole picture. Guide, Enable, and Execute factors brought together in one seamless, vertical workflow.
                                     </p>
                                 </div>
                             </div>
