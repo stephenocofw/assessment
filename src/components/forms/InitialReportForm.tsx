@@ -7,12 +7,17 @@ import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Label } from '../ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Mic } from 'lucide-react';
+import { VoiceIntake } from '../VoiceIntake';
+import { ConversationalIntake } from '../ConversationalIntake';
+import { Sparkles } from 'lucide-react';
 
 export function InitialReportForm() {
     const navigate = useNavigate();
     const { addIncident, workTypes, worksites } = useIncidents();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isVoiceIntakeOpen, setIsVoiceIntakeOpen] = useState(false);
+    const [isConversationalIntakeOpen, setIsConversationalIntakeOpen] = useState(false);
 
     const [formData, setFormData] = useState({
         whatHappened: '',
@@ -72,10 +77,30 @@ export function InitialReportForm() {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>New Safety Incident</CardTitle>
-                    <CardDescription>
-                        Capture the facts. Focus on what happened, not who is to blame.
-                    </CardDescription>
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <CardTitle>New Safety Incident</CardTitle>
+                            <CardDescription>
+                                Capture the facts. Focus on what happened, not who is to blame.
+                            </CardDescription>
+                        </div>
+                        <Button
+                            variant="outline"
+                            className="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border-indigo-200"
+                            onClick={() => setIsVoiceIntakeOpen(true)}
+                        >
+                            <Mic className="w-4 h-4 mr-2" />
+                            Voice AI
+                        </Button>
+                        <Button
+                            variant="default"
+                            className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 border-0 shadow-md"
+                            onClick={() => setIsConversationalIntakeOpen(true)}
+                        >
+                            <Sparkles className="w-4 h-4 mr-2" />
+                            Conversational Mode
+                        </Button>
+                    </div>
                 </CardHeader>
                 <form onSubmit={handleSubmit}>
                     <CardContent className="space-y-6">
@@ -279,6 +304,25 @@ export function InitialReportForm() {
                     </CardFooter>
                 </form>
             </Card>
+
+            <VoiceIntake
+                isOpen={isVoiceIntakeOpen}
+                onClose={() => setIsVoiceIntakeOpen(false)}
+                onComplete={(data) => {
+                    setFormData(prev => ({ ...prev, ...data }));
+                }}
+                currentData={formData}
+            />
+
+            <ConversationalIntake
+                isOpen={isConversationalIntakeOpen}
+                onClose={() => setIsConversationalIntakeOpen(false)}
+                onComplete={(data) => {
+                    setFormData(prev => ({ ...prev, ...data }));
+                    setIsConversationalIntakeOpen(false);
+                }}
+                currentData={formData}
+            />
         </div >
     );
 }

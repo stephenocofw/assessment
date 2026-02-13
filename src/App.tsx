@@ -10,6 +10,7 @@ import { TriageDetail } from './components/TriageDetail';
 import { Settings } from './components/Settings';
 import { MarketingPage } from './components/MarketingPage';
 import { TrendsPage } from './components/analytics/TrendsPage';
+import { AITestComponent } from './components/AITest';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             <Route path="/trends" element={<TrendsPage />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/assessments/:id" element={<InvestigationForm />} />
+            <Route path="/ai-test" element={<AITestComponent />} />
           </Route>
         </Routes>
       </Router>

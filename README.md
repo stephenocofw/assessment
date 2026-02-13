@@ -29,6 +29,8 @@ A modern, React-based application for safety incident reporting and systemic inv
     npm run dev
     ```
 
+    > **Note:** You will need to create a `.env` file (based on `.env.example`) with your API keys for the app to function fully.
+
 3.  **Build for Production**
     ```bash
     npm run build
